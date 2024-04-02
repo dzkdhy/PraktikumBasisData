@@ -1,0 +1,731 @@
+NAMA : DZAKA DHIYA RACHMANTO
+NIM : 0110223253
+
+Setting environment for using XAMPP for Windows.
+ASUS@DESKTOP-CSQFI86 c:\xampp
+# mysql -u rot -p
+Enter password:
+ERROR 1045 (28000): Access denied for user 'rot'@'localhost' (using password: NO)
+
+ASUS@DESKTOP-CSQFI86 c:\xampp
+# mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 10
+Server version: 10.4.28-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| dbkuliah           |
+| dbkuliah1          |
+| dbpegawai          |
+| dbti08             |
+| information_schema |
+| mysql              |
+| performance_schema |
+| phpmyadmin         |
+| test               |
++--------------------+
+9 rows in set (0.053 sec)
+
+MariaDB [(none)]> DROP DATABASES dbpegawai;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'DATABASES dbpegawai' at line 1
+MariaDB [(none)]> DROP DATABASE dbpegawai;
+Query OK, 3 rows affected (0.152 sec)
+
+MariaDB [(none)]> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| dbkuliah           |
+| dbkuliah1          |
+| dbti08             |
+| information_schema |
+| mysql              |
+| performance_schema |
+| phpmyadmin         |
+| test               |
++--------------------+
+8 rows in set (0.001 sec)
+
+MariaDB [(none)]> CREATE DATABASE dbpegawai;
+Query OK, 1 row affected (0.002 sec)
+
+MariaDB [(none)]> USE dbpegawai;
+Database changed
+MariaDB [dbpegawai]> CREATE TABLE divisi(
+    -> id INT PRIMARY KEY AUTO_INCREMENT,
+    -> nama VARCHAR(30) NOT NULL UNIQUE);
+Query OK, 0 rows affected (0.040 sec)
+
+MariaDB [dbpegawai]> SHOW COLUMNS FROM divisi;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama  | varchar(30) | NO   | UNI | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.026 sec)
+
+MariaDB [dbpegawai]> CREATE TABLE jabatan(
+    -> id INT PRIMARY KEY AUTO_INCREMENT,
+    -> nama VARCHAR(30) NOT NULL UNIQUE);
+Query OK, 0 rows affected (0.037 sec)
+
+MariaDB [dbpegawai]> SHOW COLUMNS FROM jabatan;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama  | varchar(30) | NO   | UNI | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.032 sec)
+
+MariaDB [dbpegawai]> CREATE TABLE pegawai(
+    -> id INT PRIMARY KEY AUTO_INCREMENT,
+    -> nip CHAR(5) NOT NULL UNIQUE,
+    -> nama VARCHAR(30) NOT NULL,
+    -> gender ENUM('Laki-Laki','Perempuan') NOT NULL,
+    -> tmp_lahir VARCHAR(30) NOT NULL,
+    -> tgl_lahir DATE NOT NULL,
+    -> id_divisi INT NOT NULL,
+    -> id_jabatan INT NOT NULL,
+    -> alamat TEXT,
+    -> FOREIGN KEY (id_divisi) REFERENCES divisi(id),
+    -> FOREIGN KEY (id_jabatan) REFERENCES jabatan(id));
+Query OK, 0 rows affected (0.039 sec)
+
+MariaDB [dbpegawai]> SHOW COLUMNS FROM pegawai;
++------------+-------------------------------+------+-----+---------+----------------+
+| Field      | Type                          | Null | Key | Default | Extra          |
++------------+-------------------------------+------+-----+---------+----------------+
+| id         | int(11)                       | NO   | PRI | NULL    | auto_increment |
+| nip        | char(5)                       | NO   | UNI | NULL    |                |
+| nama       | varchar(30)                   | NO   |     | NULL    |                |
+| gender     | enum('Laki-Laki','Perempuan') | NO   |     | NULL    |                |
+| tmp_lahir  | varchar(30)                   | NO   |     | NULL    |                |
+| tgl_lahir  | date                          | NO   |     | NULL    |                |
+| id_divisi  | int(11)                       | NO   | MUL | NULL    |                |
+| id_jabatan | int(11)                       | NO   | MUL | NULL    |                |
+| alamat     | text                          | YES  |     | NULL    |                |
++------------+-------------------------------+------+-----+---------+----------------+
+9 rows in set (0.025 sec)
+
+MariaDB [dbpegawai]> SHOW TABLES;
++---------------------+
+| Tables_in_dbpegawai |
++---------------------+
+| divisi              |
+| jabatan             |
+| pegawai             |
++---------------------+
+3 rows in set (0.002 sec)
+
+MariaDB [dbpegawai]> INSERT INTO divisi (nama) VALUES
+    -> ('SDM'),
+    -> ('Keuangan'),
+    -> ('Marketing'),
+    -> ('IT');
+Query OK, 4 rows affected (0.004 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+MariaDB [dbpegawai]> SELECT * FROM divisi;
++----+-----------+
+| id | nama      |
++----+-----------+
+|  4 | IT        |
+|  2 | Keuangan  |
+|  3 | Marketing |
+|  1 | SDM       |
++----+-----------+
+4 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> INSERT INTO jabatan (nama) VALUES
+    -> ('Direktur'),
+    -> ('Asisten Manager'),
+    -> ('Staff');
+Query OK, 3 rows affected (0.005 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+MariaDB [dbpegawai]> SELECT * FROM jabatan;
++----+-----------------+
+| id | nama            |
++----+-----------------+
+|  2 | Asisten Manager |
+|  1 | Direktur        |
+|  3 | Staff           |
++----+-----------------+
+3 rows in set (0.003 sec)
+
+MariaDB [dbpegawai]> INSERT INTO pegawai (nip, nama, gender, tmp_lahir, tgl_lahir, id_divisi, id_jabatan, alamat)
+    -> VALUES
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 2
+MariaDB [dbpegawai]> INSERT INTO pegawai (nip, nama, gender, tmp_lahir, tgl_lahir, id_divisi, id_jabatan, alamat)
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1
+MariaDB [dbpegawai]> INSERT INTO pegawai (nip, nama, gender, tmp_lahir, tgl_lahir, id_divisi, id_jabatan, alamat)
+    -> VALUES
+    -> ('NIP21', 'Rian Ramadhan', 'Laki-Laki', 'Bandung', '1990-01-15', 1, 1, 'Jl Bungur No. 21'),
+    -> ('NIP22', 'Siti Nurhaliza', 'Perempuan', 'Surabaya', '1991-02-20', 1, 2, 'Jl Pahlawan No. 22'),
+    -> ('NIP23', 'Farhan Farid', 'Laki-Laki', 'Jakarta', '1992-03-25', 1, 3, 'Jl Pelayaran No. 23'),
+    -> ('NIP24', 'Saskia Karamoy', 'Perempuan', 'Semarang', '1993-04-30', 1, 3, 'Jl Pengganti No. 24'),
+    -> ('NIP25', 'Raka Muhammad', 'Laki-Laki', 'Tasikmalaya', '1994-05-05', 1, 1, 'Jl Kemarin No. 25'),
+    -> ('NIP26', 'Ghea Indrawari', 'Perempuan', 'Jakarta', '1995-06-10', 2, 1, 'Jl Majuan No. 26'),
+    -> ('NIP27', 'Farel Nadhif', 'Laki-Laki', 'Bandung', '1996-07-15', 2, 3, 'Jl Merapi No. 27'),
+    -> ('NIP28', 'Zahra Amir', 'Perempuan', 'Solo', '1997-08-20', 2, 3, 'Jl Sejuk No. 28'),
+    -> ('NIP29', 'Ridwan Mulyadi', 'Laki-Laki', 'Bogor', '1998-09-25', 2, 2, 'Jl. Meraih Jaya No. 29'),
+    -> ('NIP30', 'Nurul Hasanah', 'Perempuan', 'Surabaya', '1999-10-30', 2, 2, 'Jl Kosongan No. 30'),
+    -> ('NIP31', 'Irfan Subakti', 'Laki-Laki', 'Bogor', '2000-11-04', 3, 2, 'Jl Piringan No. 31'),
+    -> ('NIP32', 'Putri Ayunda', 'Perempuan', 'Medan', '2001-12-09', 3, 2, 'Jl Cemara No. 32'),
+    -> ('NIP33', 'Bambang Sutrisno', 'Laki-Laki', 'Jakarta', '2002-01-14', 3, 2, 'Jl Melati No. 33'),
+    -> ('NIP34', 'Rizka Amelia', 'Perempuan', 'Bandung', '2003-02-19', 3, 2, 'Jl Beranta No. 34'),
+    -> ('NIP35', 'Ridho Muhammad', 'Laki-Laki', 'Bekasi', '2004-03-24', 3, 1, 'Jl Hijau No. 35'),
+    -> ('NIP36', 'Indah Permatasari', 'Perempuan', 'Bogor', '2005-04-29', 4, 3, 'Jl Sepangan No. 36'),
+    -> ('NIP37', 'Ahmad Fauzi', 'Laki-Laki', 'Medan', '2006-05-04', 4, 1, 'Jl Beraksi No. 37'),
+    -> ('NIP38', 'Siti Rahma', 'Perempuan', 'Bogor', '2007-06-09', 4, 1, 'Jl Semaunya No. 38'),
+    -> ('NIP39', 'Fikri Alamsyah', 'Laki-Laki', 'Jawa Tengah', '2008-07-14', 4, 3, 'Jl Rencana No. 39'),
+    -> ('NIP40', 'Anisa Fitriani', 'Perempuan', 'Jawa Timur', '2009-08-19', 4, 3, 'Jl Permata No. 40');
+Query OK, 20 rows affected (0.009 sec)
+Records: 20  Duplicates: 0  Warnings: 0
+
+MariaDB [dbpegawai]>
+MariaDB [dbpegawai]> ;
+ERROR: No query specified
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai;
++----+-------+-------------------+-----------+-------------+------------+-----------+------------+------------------------+
+| id | nip   | nama              | gender    | tmp_lahir   | tgl_lahir  | id_divisi | id_jabatan | alamat                 |
++----+-------+-------------------+-----------+-------------+------------+-----------+------------+------------------------+
+|  1 | NIP21 | Rian Ramadhan     | Laki-Laki | Bandung     | 1990-01-15 |         1 |          1 | Jl Bungur No. 21       |
+|  2 | NIP22 | Siti Nurhaliza    | Perempuan | Surabaya    | 1991-02-20 |         1 |          2 | Jl Pahlawan No. 22     |
+|  3 | NIP23 | Farhan Farid      | Laki-Laki | Jakarta     | 1992-03-25 |         1 |          3 | Jl Pelayaran No. 23    |
+|  4 | NIP24 | Saskia Karamoy    | Perempuan | Semarang    | 1993-04-30 |         1 |          3 | Jl Pengganti No. 24    |
+|  5 | NIP25 | Raka Muhammad     | Laki-Laki | Tasikmalaya | 1994-05-05 |         1 |          1 | Jl Kemarin No. 25      |
+|  6 | NIP26 | Ghea Indrawari    | Perempuan | Jakarta     | 1995-06-10 |         2 |          1 | Jl Majuan No. 26       |
+|  7 | NIP27 | Farel Nadhif      | Laki-Laki | Bandung     | 1996-07-15 |         2 |          3 | Jl Merapi No. 27       |
+|  8 | NIP28 | Zahra Amir        | Perempuan | Solo        | 1997-08-20 |         2 |          3 | Jl Sejuk No. 28        |
+|  9 | NIP29 | Ridwan Mulyadi    | Laki-Laki | Bogor       | 1998-09-25 |         2 |          2 | Jl. Meraih Jaya No. 29 |
+| 10 | NIP30 | Nurul Hasanah     | Perempuan | Surabaya    | 1999-10-30 |         2 |          2 | Jl Kosongan No. 30     |
+| 11 | NIP31 | Irfan Subakti     | Laki-Laki | Bogor       | 2000-11-04 |         3 |          2 | Jl Piringan No. 31     |
+| 12 | NIP32 | Putri Ayunda      | Perempuan | Medan       | 2001-12-09 |         3 |          2 | Jl Cemara No. 32       |
+| 13 | NIP33 | Bambang Sutrisno  | Laki-Laki | Jakarta     | 2002-01-14 |         3 |          2 | Jl Melati No. 33       |
+| 14 | NIP34 | Rizka Amelia      | Perempuan | Bandung     | 2003-02-19 |         3 |          2 | Jl Beranta No. 34      |
+| 15 | NIP35 | Ridho Muhammad    | Laki-Laki | Bekasi      | 2004-03-24 |         3 |          1 | Jl Hijau No. 35        |
+| 16 | NIP36 | Indah Permatasari | Perempuan | Bogor       | 2005-04-29 |         4 |          3 | Jl Sepangan No. 36     |
+| 17 | NIP37 | Ahmad Fauzi       | Laki-Laki | Medan       | 2006-05-04 |         4 |          1 | Jl Beraksi No. 37      |
+| 18 | NIP38 | Siti Rahma        | Perempuan | Bogor       | 2007-06-09 |         4 |          1 | Jl Semaunya No. 38     |
+| 19 | NIP39 | Fikri Alamsyah    | Laki-Laki | Jawa Tengah | 2008-07-14 |         4 |          3 | Jl Rencana No. 39      |
+| 20 | NIP40 | Anisa Fitriani    | Perempuan | Jawa Timur  | 2009-08-19 |         4 |          3 | Jl Permata No. 40      |
++----+-------+-------------------+-----------+-------------+------------+-----------+------------+------------------------+
+20 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET alamat = 'Jl jeruk No. 123', id_divisi = 3, id_jabatan = 2
+    -> WHERE nip = 'NIP1';
+Query OK, 0 rows affected (0.001 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET tmp_lahir = 'Surabaya',
+    -> tgl_lahir = '1999-01-02', id_divisi = 4
+    -> WHERE nip = 'NIP2';
+Query OK, 0 rows affected (0.001 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET nama = 'Ari Ilham Satria'
+    -> gender = 'Laki-laki', id_jabatan = 4
+    -> WHERE nip = 'NIP3';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'gender = 'Laki-laki', id_jabatan = 4
+WHERE nip = 'NIP3'' at line 3
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET tmp_lahir = 'Surabaya',
+    -> tgl_lahir = '1999-01-02', id_divisi = 4
+    -> WHERE nip = 'NIP40';
+Query OK, 1 row affected (0.005 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET nama = 'Serena',
+    -> alamat = 'Jl Utama No. 456'
+    -> tgl_lahir = '1993-04-05'
+    -> WHERE nip = 'NIP39';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'tgl_lahir = '1993-04-05'
+WHERE nip = 'NIP39'' at line 4
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET nama = 'Serena',
+    -> alamat = 'Jl Utama No. 456'
+    -> tgl_lahir = '1993-04-05'
+    -> WHERE nip = 'NIP26';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'tgl_lahir = '1993-04-05'
+WHERE nip = 'NIP26'' at line 4
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET nama = 'Serena',
+    -> alamat = 'Jl Utama No. 456'
+    -> tgl_lahir = '1993-04-05'
+    -> WHERE nip = 'NIP21';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'tgl_lahir = '1993-04-05'
+WHERE nip = 'NIP21'' at line 4
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET nama = 'Serena',
+    -> alamat = 'Jl Utama No. 456'
+    -> tgl_lahir = '2005-04-29',
+    -> WHERE nip = 'NIP21';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'tgl_lahir = '2005-04-29',
+WHERE nip = 'NIP21'' at line 4
+MariaDB [dbpegawai]> SET nama = 'Serena',
+    -> tgl_lahir = '1993-04-05',
+    -> alamat = 'Jl Utama No. 456'
+    -> WHERE nip = 'NIP21';
+ERROR 1193 (HY000): Unknown system variable 'nama'
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET nama = 'Serena'
+    -> alamat = 'Jl Utama No. 456'
+    -> tgl_lahir = '2005-04-29'
+    -> WHERE nip = 'NIP21';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'alamat = 'Jl Utama No. 456'
+tgl_lahir = '2005-04-29'
+WHERE nip = 'NIP21'' at line 3
+MariaDB [dbpegawai]> SET nama = 'Serena',
+    -> SET nama = 'Serena',;
+ERROR 1193 (HY000): Unknown system variable 'nama'
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET nama = 'Serena'
+    -> alamat = 'Jl Utama No. 456'
+    -> tgl_lahir = '1993-04-05',
+    -> WHERE nip = 'NIP21';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'alamat = 'Jl Utama No. 456'
+tgl_lahir = '1993-04-05',
+WHERE nip = 'NIP21'' at line 3
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET tmp_lahir = 'Jakarta', id_jabatan = 3
+    -> WHERE nip = 'NIP21';
+Query OK, 1 row affected (0.004 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbpegawai]> DELETE FROM pegawai
+    ->  ORDER BY id DESC
+    -> LIMIT 2;
+Query OK, 2 rows affected (0.004 sec)
+
+MariaDB [dbpegawai]> ALTER TABLE pegawai
+    -> ADD COLUMN berat_badan FLOAT NOT NULL;
+Query OK, 0 rows affected (0.014 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbpegawai]> ALTER TABLE pegawai
+    -> ADD COLUMN umur INTEGER NOT NULL;
+Query OK, 0 rows affected (0.013 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET umur = FLOOR(RAND() * 50) + 20;
+Query OK, 18 rows affected (0.006 sec)
+Rows matched: 18  Changed: 18  Warnings: 0
+
+MariaDB [dbpegawai]> ALTER TABLE pegawai
+    -> CHANGE COLUMN gender jenis_kelamin VARCHAR(20) NOT NULL;
+Query OK, 18 rows affected (0.107 sec)
+Records: 18  Duplicates: 0  Warnings: 0
+
+MariaDB [dbpegawai]> SELECT nip, nama, jenis_kelamin, alamat FROM pegawai;
++-------+-------------------+---------------+------------------------+
+| nip   | nama              | jenis_kelamin | alamat                 |
++-------+-------------------+---------------+------------------------+
+| NIP21 | Rian Ramadhan     | Laki-Laki     | Jl Bungur No. 21       |
+| NIP22 | Siti Nurhaliza    | Perempuan     | Jl Pahlawan No. 22     |
+| NIP23 | Farhan Farid      | Laki-Laki     | Jl Pelayaran No. 23    |
+| NIP24 | Saskia Karamoy    | Perempuan     | Jl Pengganti No. 24    |
+| NIP25 | Raka Muhammad     | Laki-Laki     | Jl Kemarin No. 25      |
+| NIP26 | Ghea Indrawari    | Perempuan     | Jl Majuan No. 26       |
+| NIP27 | Farel Nadhif      | Laki-Laki     | Jl Merapi No. 27       |
+| NIP28 | Zahra Amir        | Perempuan     | Jl Sejuk No. 28        |
+| NIP29 | Ridwan Mulyadi    | Laki-Laki     | Jl. Meraih Jaya No. 29 |
+| NIP30 | Nurul Hasanah     | Perempuan     | Jl Kosongan No. 30     |
+| NIP31 | Irfan Subakti     | Laki-Laki     | Jl Piringan No. 31     |
+| NIP32 | Putri Ayunda      | Perempuan     | Jl Cemara No. 32       |
+| NIP33 | Bambang Sutrisno  | Laki-Laki     | Jl Melati No. 33       |
+| NIP34 | Rizka Amelia      | Perempuan     | Jl Beranta No. 34      |
+| NIP35 | Ridho Muhammad    | Laki-Laki     | Jl Hijau No. 35        |
+| NIP36 | Indah Permatasari | Perempuan     | Jl Sepangan No. 36     |
+| NIP37 | Ahmad Fauzi       | Laki-Laki     | Jl Beraksi No. 37      |
+| NIP38 | Siti Rahma        | Perempuan     | Jl Semaunya No. 38     |
++-------+-------------------+---------------+------------------------+
+18 rows in set (0.002 sec)
+
+MariaDB [dbpegawai]> Bye
+
+ASUS@DESKTOP-CSQFI86 c:\xampp
+# mysql -u root p
+ERROR 1049 (42000): Unknown database 'p'
+
+ASUS@DESKTOP-CSQFI86 c:\xampp
+# mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 12
+Server version: 10.4.28-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> USE dbpegawai;
+Database changed
+MariaDB [dbpegawai]> SELECT nip, nama, jenis_kelamin, alamat FROM pegawai;
++-------+-------------------+---------------+------------------------+
+| nip   | nama              | jenis_kelamin | alamat                 |
++-------+-------------------+---------------+------------------------+
+| NIP21 | Rian Ramadhan     | Laki-Laki     | Jl Bungur No. 21       |
+| NIP22 | Siti Nurhaliza    | Perempuan     | Jl Pahlawan No. 22     |
+| NIP23 | Farhan Farid      | Laki-Laki     | Jl Pelayaran No. 23    |
+| NIP24 | Saskia Karamoy    | Perempuan     | Jl Pengganti No. 24    |
+| NIP25 | Raka Muhammad     | Laki-Laki     | Jl Kemarin No. 25      |
+| NIP26 | Ghea Indrawari    | Perempuan     | Jl Majuan No. 26       |
+| NIP27 | Farel Nadhif      | Laki-Laki     | Jl Merapi No. 27       |
+| NIP28 | Zahra Amir        | Perempuan     | Jl Sejuk No. 28        |
+| NIP29 | Ridwan Mulyadi    | Laki-Laki     | Jl. Meraih Jaya No. 29 |
+| NIP30 | Nurul Hasanah     | Perempuan     | Jl Kosongan No. 30     |
+| NIP31 | Irfan Subakti     | Laki-Laki     | Jl Piringan No. 31     |
+| NIP32 | Putri Ayunda      | Perempuan     | Jl Cemara No. 32       |
+| NIP33 | Bambang Sutrisno  | Laki-Laki     | Jl Melati No. 33       |
+| NIP34 | Rizka Amelia      | Perempuan     | Jl Beranta No. 34      |
+| NIP35 | Ridho Muhammad    | Laki-Laki     | Jl Hijau No. 35        |
+| NIP36 | Indah Permatasari | Perempuan     | Jl Sepangan No. 36     |
+| NIP37 | Ahmad Fauzi       | Laki-Laki     | Jl Beraksi No. 37      |
+| NIP38 | Siti Rahma        | Perempuan     | Jl Semaunya No. 38     |
++-------+-------------------+---------------+------------------------+
+18 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE jenis_kelamin = 'Laki-laki';
++----+-------+------------------+---------------+-------------+------------+-----------+------------+------------------------+-------------+------+
+| id | nip   | nama             | jenis_kelamin | tmp_lahir   | tgl_lahir  | id_divisi | id_jabatan | alamat                 | berat_badan | umur |
++----+-------+------------------+---------------+-------------+------------+-----------+------------+------------------------+-------------+------+
+|  1 | NIP21 | Rian Ramadhan    | Laki-Laki     | Jakarta     | 1990-01-15 |         1 |          3 | Jl Bungur No. 21       |           0 |   67 |
+|  3 | NIP23 | Farhan Farid     | Laki-Laki     | Jakarta     | 1992-03-25 |         1 |          3 | Jl Pelayaran No. 23    |           0 |   25 |
+|  5 | NIP25 | Raka Muhammad    | Laki-Laki     | Tasikmalaya | 1994-05-05 |         1 |          1 | Jl Kemarin No. 25      |           0 |   51 |
+|  7 | NIP27 | Farel Nadhif     | Laki-Laki     | Bandung     | 1996-07-15 |         2 |          3 | Jl Merapi No. 27       |           0 |   60 |
+|  9 | NIP29 | Ridwan Mulyadi   | Laki-Laki     | Bogor       | 1998-09-25 |         2 |          2 | Jl. Meraih Jaya No. 29 |           0 |   59 |
+| 11 | NIP31 | Irfan Subakti    | Laki-Laki     | Bogor       | 2000-11-04 |         3 |          2 | Jl Piringan No. 31     |           0 |   54 |
+| 13 | NIP33 | Bambang Sutrisno | Laki-Laki     | Jakarta     | 2002-01-14 |         3 |          2 | Jl Melati No. 33       |           0 |   23 |
+| 15 | NIP35 | Ridho Muhammad   | Laki-Laki     | Bekasi      | 2004-03-24 |         3 |          1 | Jl Hijau No. 35        |           0 |   67 |
+| 17 | NIP37 | Ahmad Fauzi      | Laki-Laki     | Medan       | 2006-05-04 |         4 |          1 | Jl Beraksi No. 37      |           0 |   38 |
++----+-------+------------------+---------------+-------------+------------+-----------+------------+------------------------+-------------+------+
+9 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE id_divisi = 2 AND jenis_kelamin = 'Perempuan';
++----+-------+----------------+---------------+-----------+------------+-----------+------------+--------------------+-------------+------+
+| id | nip   | nama           | jenis_kelamin | tmp_lahir | tgl_lahir  | id_divisi | id_jabatan | alamat             | berat_badan | umur |
++----+-------+----------------+---------------+-----------+------------+-----------+------------+--------------------+-------------+------+
+|  6 | NIP26 | Ghea Indrawari | Perempuan     | Jakarta   | 1995-06-10 |         2 |          1 | Jl Majuan No. 26   |           0 |   56 |
+|  8 | NIP28 | Zahra Amir     | Perempuan     | Solo      | 1997-08-20 |         2 |          3 | Jl Sejuk No. 28    |           0 |   62 |
+| 10 | NIP30 | Nurul Hasanah  | Perempuan     | Surabaya  | 1999-10-30 |         2 |          2 | Jl Kosongan No. 30 |           0 |   40 |
++----+-------+----------------+---------------+-----------+------------+-----------+------------+--------------------+-------------+------+
+3 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE umur > 30 AND tmp_lahir = 'Jakarta';
++----+-------+----------------+---------------+-----------+------------+-----------+------------+------------------+-------------+------+
+| id | nip   | nama           | jenis_kelamin | tmp_lahir | tgl_lahir  | id_divisi | id_jabatan | alamat           | berat_badan | umur |
++----+-------+----------------+---------------+-----------+------------+-----------+------------+------------------+-------------+------+
+|  1 | NIP21 | Rian Ramadhan  | Laki-Laki     | Jakarta   | 1990-01-15 |         1 |          3 | Jl Bungur No. 21 |           0 |   67 |
+|  6 | NIP26 | Ghea Indrawari | Perempuan     | Jakarta   | 1995-06-10 |         2 |          1 | Jl Majuan No. 26 |           0 |   56 |
++----+-------+----------------+---------------+-----------+------------+-----------+------------+------------------+-------------+------+
+2 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> WHERE id_divisi = 1 AND umur > 30 AND jenis_kelamin = 'Perempuan';
++----+-------+----------------+---------------+-----------+------------+-----------+------------+---------------------+-------------+------+
+| id | nip   | nama           | jenis_kelamin | tmp_lahir | tgl_lahir  | id_divisi | id_jabatan | alamat              | berat_badan | umur |
++----+-------+----------------+---------------+-----------+------------+-----------+------------+---------------------+-------------+------+
+|  2 | NIP22 | Siti Nurhaliza | Perempuan     | Surabaya  | 1991-02-20 |         1 |          2 | Jl Pahlawan No. 22  |           0 |   49 |
+|  4 | NIP24 | Saskia Karamoy | Perempuan     | Semarang  | 1993-04-30 |         1 |          3 | Jl Pengganti No. 24 |           0 |   59 |
++----+-------+----------------+---------------+-----------+------------+-----------+------------+---------------------+-------------+------+
+2 rows in set (0.005 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> WHERE id_divisi = 1 AND umur > 30 AND jenis_kelamin = 'Perempuan';
++----+-------+----------------+---------------+-----------+------------+-----------+------------+---------------------+-------------+------+
+| id | nip   | nama           | jenis_kelamin | tmp_lahir | tgl_lahir  | id_divisi | id_jabatan | alamat              | berat_badan | umur |
++----+-------+----------------+---------------+-----------+------------+-----------+------------+---------------------+-------------+------+
+|  2 | NIP22 | Siti Nurhaliza | Perempuan     | Surabaya  | 1991-02-20 |         1 |          2 | Jl Pahlawan No. 22  |           0 |   49 |
+|  4 | NIP24 | Saskia Karamoy | Perempuan     | Semarang  | 1993-04-30 |         1 |          3 | Jl Pengganti No. 24 |           0 |   59 |
++----+-------+----------------+---------------+-----------+------------+-----------+------------+---------------------+-------------+------+
+2 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE nip = 'NIP21';
++----+-------+---------------+---------------+-----------+------------+-----------+------------+------------------+-------------+------+
+| id | nip   | nama          | jenis_kelamin | tmp_lahir | tgl_lahir  | id_divisi | id_jabatan | alamat           | berat_badan | umur |
++----+-------+---------------+---------------+-----------+------------+-----------+------------+------------------+-------------+------+
+|  1 | NIP21 | Rian Ramadhan | Laki-Laki     | Jakarta   | 1990-01-15 |         1 |          3 | Jl Bungur No. 21 |           0 |   67 |
++----+-------+---------------+---------------+-----------+------------+-----------+------------+------------------+-------------+------+
+1 row in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE jenis_kelamin = 'Laki-laki';
++----+-------+------------------+---------------+-------------+------------+-----------+------------+------------------------+-------------+------+
+| id | nip   | nama             | jenis_kelamin | tmp_lahir   | tgl_lahir  | id_divisi | id_jabatan | alamat                 | berat_badan | umur |
++----+-------+------------------+---------------+-------------+------------+-----------+------------+------------------------+-------------+------+
+|  1 | NIP21 | Rian Ramadhan    | Laki-Laki     | Jakarta     | 1990-01-15 |         1 |          3 | Jl Bungur No. 21       |           0 |   67 |
+|  3 | NIP23 | Farhan Farid     | Laki-Laki     | Jakarta     | 1992-03-25 |         1 |          3 | Jl Pelayaran No. 23    |           0 |   25 |
+|  5 | NIP25 | Raka Muhammad    | Laki-Laki     | Tasikmalaya | 1994-05-05 |         1 |          1 | Jl Kemarin No. 25      |           0 |   51 |
+|  7 | NIP27 | Farel Nadhif     | Laki-Laki     | Bandung     | 1996-07-15 |         2 |          3 | Jl Merapi No. 27       |           0 |   60 |
+|  9 | NIP29 | Ridwan Mulyadi   | Laki-Laki     | Bogor       | 1998-09-25 |         2 |          2 | Jl. Meraih Jaya No. 29 |           0 |   59 |
+| 11 | NIP31 | Irfan Subakti    | Laki-Laki     | Bogor       | 2000-11-04 |         3 |          2 | Jl Piringan No. 31     |           0 |   54 |
+| 13 | NIP33 | Bambang Sutrisno | Laki-Laki     | Jakarta     | 2002-01-14 |         3 |          2 | Jl Melati No. 33       |           0 |   23 |
+| 15 | NIP35 | Ridho Muhammad   | Laki-Laki     | Bekasi      | 2004-03-24 |         3 |          1 | Jl Hijau No. 35        |           0 |   67 |
+| 17 | NIP37 | Ahmad Fauzi      | Laki-Laki     | Medan       | 2006-05-04 |         4 |          1 | Jl Beraksi No. 37      |           0 |   38 |
++----+-------+------------------+---------------+-------------+------------+-----------+------------+------------------------+-------------+------+
+9 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> Bye
+
+ASUS@DESKTOP-CSQFI86 c:\xampp
+# mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 13
+Server version: 10.4.28-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> USE dbpegawai;
+Database changed
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE jenis_kelamin = 'Laki-laki';
++----+-------+------------------+---------------+-------------+------------+-----------+------------+------------------------+-------------+------+
+| id | nip   | nama             | jenis_kelamin | tmp_lahir   | tgl_lahir  | id_divisi | id_jabatan | alamat                 | berat_badan | umur |
++----+-------+------------------+---------------+-------------+------------+-----------+------------+------------------------+-------------+------+
+|  1 | NIP21 | Rian Ramadhan    | Laki-Laki     | Jakarta     | 1990-01-15 |         1 |          3 | Jl Bungur No. 21       |           0 |   67 |
+|  3 | NIP23 | Farhan Farid     | Laki-Laki     | Jakarta     | 1992-03-25 |         1 |          3 | Jl Pelayaran No. 23    |           0 |   25 |
+|  5 | NIP25 | Raka Muhammad    | Laki-Laki     | Tasikmalaya | 1994-05-05 |         1 |          1 | Jl Kemarin No. 25      |           0 |   51 |
+|  7 | NIP27 | Farel Nadhif     | Laki-Laki     | Bandung     | 1996-07-15 |         2 |          3 | Jl Merapi No. 27       |           0 |   60 |
+|  9 | NIP29 | Ridwan Mulyadi   | Laki-Laki     | Bogor       | 1998-09-25 |         2 |          2 | Jl. Meraih Jaya No. 29 |           0 |   59 |
+| 11 | NIP31 | Irfan Subakti    | Laki-Laki     | Bogor       | 2000-11-04 |         3 |          2 | Jl Piringan No. 31     |           0 |   54 |
+| 13 | NIP33 | Bambang Sutrisno | Laki-Laki     | Jakarta     | 2002-01-14 |         3 |          2 | Jl Melati No. 33       |           0 |   23 |
+| 15 | NIP35 | Ridho Muhammad   | Laki-Laki     | Bekasi      | 2004-03-24 |         3 |          1 | Jl Hijau No. 35        |           0 |   67 |
+| 17 | NIP37 | Ahmad Fauzi      | Laki-Laki     | Medan       | 2006-05-04 |         4 |          1 | Jl Beraksi No. 37      |           0 |   38 |
++----+-------+------------------+---------------+-------------+------------+-----------+------------+------------------------+-------------+------+
+9 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE nip IN ('NIP21', 'NIP23', 'NIP25');
++----+-------+---------------+---------------+-------------+------------+-----------+------------+---------------------+-------------+------+
+| id | nip   | nama          | jenis_kelamin | tmp_lahir   | tgl_lahir  | id_divisi | id_jabatan | alamat              | berat_badan | umur |
++----+-------+---------------+---------------+-------------+------------+-----------+------------+---------------------+-------------+------+
+|  1 | NIP21 | Rian Ramadhan | Laki-Laki     | Jakarta     | 1990-01-15 |         1 |          3 | Jl Bungur No. 21    |           0 |   67 |
+|  3 | NIP23 | Farhan Farid  | Laki-Laki     | Jakarta     | 1992-03-25 |         1 |          3 | Jl Pelayaran No. 23 |           0 |   25 |
+|  5 | NIP25 | Raka Muhammad | Laki-Laki     | Tasikmalaya | 1994-05-05 |         1 |          1 | Jl Kemarin No. 25   |           0 |   51 |
++----+-------+---------------+---------------+-------------+------------+-----------+------------+---------------------+-------------+------+
+3 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai WHERE tmp_lahir NOT IN ('Jakarta', 'Bandung', 'Surabaya');
++----+-------+-------------------+---------------+-------------+------------+-----------+------------+------------------------+-------------+------+
+| id | nip   | nama              | jenis_kelamin | tmp_lahir   | tgl_lahir  | id_divisi | id_jabatan | alamat                 | berat_badan | umur |
++----+-------+-------------------+---------------+-------------+------------+-----------+------------+------------------------+-------------+------+
+|  4 | NIP24 | Saskia Karamoy    | Perempuan     | Semarang    | 1993-04-30 |         1 |          3 | Jl Pengganti No. 24    |           0 |   59 |
+|  5 | NIP25 | Raka Muhammad     | Laki-Laki     | Tasikmalaya | 1994-05-05 |         1 |          1 | Jl Kemarin No. 25      |           0 |   51 |
+|  8 | NIP28 | Zahra Amir        | Perempuan     | Solo        | 1997-08-20 |         2 |          3 | Jl Sejuk No. 28        |           0 |   62 |
+|  9 | NIP29 | Ridwan Mulyadi    | Laki-Laki     | Bogor       | 1998-09-25 |         2 |          2 | Jl. Meraih Jaya No. 29 |           0 |   59 |
+| 11 | NIP31 | Irfan Subakti     | Laki-Laki     | Bogor       | 2000-11-04 |         3 |          2 | Jl Piringan No. 31     |           0 |   54 |
+| 12 | NIP32 | Putri Ayunda      | Perempuan     | Medan       | 2001-12-09 |         3 |          2 | Jl Cemara No. 32       |           0 |   31 |
+| 15 | NIP35 | Ridho Muhammad    | Laki-Laki     | Bekasi      | 2004-03-24 |         3 |          1 | Jl Hijau No. 35        |           0 |   67 |
+| 16 | NIP36 | Indah Permatasari | Perempuan     | Bogor       | 2005-04-29 |         4 |          3 | Jl Sepangan No. 36     |           0 |   62 |
+| 17 | NIP37 | Ahmad Fauzi       | Laki-Laki     | Medan       | 2006-05-04 |         4 |          1 | Jl Beraksi No. 37      |           0 |   38 |
+| 18 | NIP38 | Siti Rahma        | Perempuan     | Bogor       | 2007-06-09 |         4 |          1 | Jl Semaunya No. 38     |           0 |   38 |
++----+-------+-------------------+---------------+-------------+------------+-----------+------------+------------------------+-------------+------+
+10 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai ORDER BY nama ASC;
++----+-------+-------------------+---------------+-------------+------------+-----------+------------+------------------------+-------------+------+
+| id | nip   | nama              | jenis_kelamin | tmp_lahir   | tgl_lahir  | id_divisi | id_jabatan | alamat                 | berat_badan | umur |
++----+-------+-------------------+---------------+-------------+------------+-----------+------------+------------------------+-------------+------+
+| 17 | NIP37 | Ahmad Fauzi       | Laki-Laki     | Medan       | 2006-05-04 |         4 |          1 | Jl Beraksi No. 37      |           0 |   38 |
+| 13 | NIP33 | Bambang Sutrisno  | Laki-Laki     | Jakarta     | 2002-01-14 |         3 |          2 | Jl Melati No. 33       |           0 |   23 |
+|  7 | NIP27 | Farel Nadhif      | Laki-Laki     | Bandung     | 1996-07-15 |         2 |          3 | Jl Merapi No. 27       |           0 |   60 |
+|  3 | NIP23 | Farhan Farid      | Laki-Laki     | Jakarta     | 1992-03-25 |         1 |          3 | Jl Pelayaran No. 23    |           0 |   25 |
+|  6 | NIP26 | Ghea Indrawari    | Perempuan     | Jakarta     | 1995-06-10 |         2 |          1 | Jl Majuan No. 26       |           0 |   56 |
+| 16 | NIP36 | Indah Permatasari | Perempuan     | Bogor       | 2005-04-29 |         4 |          3 | Jl Sepangan No. 36     |           0 |   62 |
+| 11 | NIP31 | Irfan Subakti     | Laki-Laki     | Bogor       | 2000-11-04 |         3 |          2 | Jl Piringan No. 31     |           0 |   54 |
+| 10 | NIP30 | Nurul Hasanah     | Perempuan     | Surabaya    | 1999-10-30 |         2 |          2 | Jl Kosongan No. 30     |           0 |   40 |
+| 12 | NIP32 | Putri Ayunda      | Perempuan     | Medan       | 2001-12-09 |         3 |          2 | Jl Cemara No. 32       |           0 |   31 |
+|  5 | NIP25 | Raka Muhammad     | Laki-Laki     | Tasikmalaya | 1994-05-05 |         1 |          1 | Jl Kemarin No. 25      |           0 |   51 |
+|  1 | NIP21 | Rian Ramadhan     | Laki-Laki     | Jakarta     | 1990-01-15 |         1 |          3 | Jl Bungur No. 21       |           0 |   67 |
+| 15 | NIP35 | Ridho Muhammad    | Laki-Laki     | Bekasi      | 2004-03-24 |         3 |          1 | Jl Hijau No. 35        |           0 |   67 |
+|  9 | NIP29 | Ridwan Mulyadi    | Laki-Laki     | Bogor       | 1998-09-25 |         2 |          2 | Jl. Meraih Jaya No. 29 |           0 |   59 |
+| 14 | NIP34 | Rizka Amelia      | Perempuan     | Bandung     | 2003-02-19 |         3 |          2 | Jl Beranta No. 34      |           0 |   51 |
+|  4 | NIP24 | Saskia Karamoy    | Perempuan     | Semarang    | 1993-04-30 |         1 |          3 | Jl Pengganti No. 24    |           0 |   59 |
+|  2 | NIP22 | Siti Nurhaliza    | Perempuan     | Surabaya    | 1991-02-20 |         1 |          2 | Jl Pahlawan No. 22     |           0 |   49 |
+| 18 | NIP38 | Siti Rahma        | Perempuan     | Bogor       | 2007-06-09 |         4 |          1 | Jl Semaunya No. 38     |           0 |   38 |
+|  8 | NIP28 | Zahra Amir        | Perempuan     | Solo        | 1997-08-20 |         2 |          3 | Jl Sejuk No. 28        |           0 |   62 |
++----+-------+-------------------+---------------+-------------+------------+-----------+------------+------------------------+-------------+------+
+18 rows in set (0.002 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai ORDER BY berat_badan DESC;
++----+-------+-------------------+---------------+-------------+------------+-----------+------------+------------------------+-------------+------+
+| id | nip   | nama              | jenis_kelamin | tmp_lahir   | tgl_lahir  | id_divisi | id_jabatan | alamat                 | berat_badan | umur |
++----+-------+-------------------+---------------+-------------+------------+-----------+------------+------------------------+-------------+------+
+|  1 | NIP21 | Rian Ramadhan     | Laki-Laki     | Jakarta     | 1990-01-15 |         1 |          3 | Jl Bungur No. 21       |           0 |   67 |
+|  2 | NIP22 | Siti Nurhaliza    | Perempuan     | Surabaya    | 1991-02-20 |         1 |          2 | Jl Pahlawan No. 22     |           0 |   49 |
+|  3 | NIP23 | Farhan Farid      | Laki-Laki     | Jakarta     | 1992-03-25 |         1 |          3 | Jl Pelayaran No. 23    |           0 |   25 |
+|  4 | NIP24 | Saskia Karamoy    | Perempuan     | Semarang    | 1993-04-30 |         1 |          3 | Jl Pengganti No. 24    |           0 |   59 |
+|  5 | NIP25 | Raka Muhammad     | Laki-Laki     | Tasikmalaya | 1994-05-05 |         1 |          1 | Jl Kemarin No. 25      |           0 |   51 |
+|  6 | NIP26 | Ghea Indrawari    | Perempuan     | Jakarta     | 1995-06-10 |         2 |          1 | Jl Majuan No. 26       |           0 |   56 |
+|  7 | NIP27 | Farel Nadhif      | Laki-Laki     | Bandung     | 1996-07-15 |         2 |          3 | Jl Merapi No. 27       |           0 |   60 |
+|  8 | NIP28 | Zahra Amir        | Perempuan     | Solo        | 1997-08-20 |         2 |          3 | Jl Sejuk No. 28        |           0 |   62 |
+|  9 | NIP29 | Ridwan Mulyadi    | Laki-Laki     | Bogor       | 1998-09-25 |         2 |          2 | Jl. Meraih Jaya No. 29 |           0 |   59 |
+| 10 | NIP30 | Nurul Hasanah     | Perempuan     | Surabaya    | 1999-10-30 |         2 |          2 | Jl Kosongan No. 30     |           0 |   40 |
+| 11 | NIP31 | Irfan Subakti     | Laki-Laki     | Bogor       | 2000-11-04 |         3 |          2 | Jl Piringan No. 31     |           0 |   54 |
+| 12 | NIP32 | Putri Ayunda      | Perempuan     | Medan       | 2001-12-09 |         3 |          2 | Jl Cemara No. 32       |           0 |   31 |
+| 13 | NIP33 | Bambang Sutrisno  | Laki-Laki     | Jakarta     | 2002-01-14 |         3 |          2 | Jl Melati No. 33       |           0 |   23 |
+| 14 | NIP34 | Rizka Amelia      | Perempuan     | Bandung     | 2003-02-19 |         3 |          2 | Jl Beranta No. 34      |           0 |   51 |
+| 15 | NIP35 | Ridho Muhammad    | Laki-Laki     | Bekasi      | 2004-03-24 |         3 |          1 | Jl Hijau No. 35        |           0 |   67 |
+| 16 | NIP36 | Indah Permatasari | Perempuan     | Bogor       | 2005-04-29 |         4 |          3 | Jl Sepangan No. 36     |           0 |   62 |
+| 17 | NIP37 | Ahmad Fauzi       | Laki-Laki     | Medan       | 2006-05-04 |         4 |          1 | Jl Beraksi No. 37      |           0 |   38 |
+| 18 | NIP38 | Siti Rahma        | Perempuan     | Bogor       | 2007-06-09 |         4 |          1 | Jl Semaunya No. 38     |           0 |   38 |
++----+-------+-------------------+---------------+-------------+------------+-----------+------------+------------------------+-------------+------+
+18 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai LIMIT 5;
++----+-------+----------------+---------------+-------------+------------+-----------+------------+---------------------+-------------+------+
+| id | nip   | nama           | jenis_kelamin | tmp_lahir   | tgl_lahir  | id_divisi | id_jabatan | alamat              | berat_badan | umur |
++----+-------+----------------+---------------+-------------+------------+-----------+------------+---------------------+-------------+------+
+|  1 | NIP21 | Rian Ramadhan  | Laki-Laki     | Jakarta     | 1990-01-15 |         1 |          3 | Jl Bungur No. 21    |           0 |   67 |
+|  2 | NIP22 | Siti Nurhaliza | Perempuan     | Surabaya    | 1991-02-20 |         1 |          2 | Jl Pahlawan No. 22  |           0 |   49 |
+|  3 | NIP23 | Farhan Farid   | Laki-Laki     | Jakarta     | 1992-03-25 |         1 |          3 | Jl Pelayaran No. 23 |           0 |   25 |
+|  4 | NIP24 | Saskia Karamoy | Perempuan     | Semarang    | 1993-04-30 |         1 |          3 | Jl Pengganti No. 24 |           0 |   59 |
+|  5 | NIP25 | Raka Muhammad  | Laki-Laki     | Tasikmalaya | 1994-05-05 |         1 |          1 | Jl Kemarin No. 25   |           0 |   51 |
++----+-------+----------------+---------------+-------------+------------+-----------+------------+---------------------+-------------+------+
+5 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai LIMIT 5 OFFSET 5;
++----+-------+----------------+---------------+-----------+------------+-----------+------------+------------------------+-------------+------+
+| id | nip   | nama           | jenis_kelamin | tmp_lahir | tgl_lahir  | id_divisi | id_jabatan | alamat                 | berat_badan | umur |
++----+-------+----------------+---------------+-----------+------------+-----------+------------+------------------------+-------------+------+
+|  6 | NIP26 | Ghea Indrawari | Perempuan     | Jakarta   | 1995-06-10 |         2 |          1 | Jl Majuan No. 26       |           0 |   56 |
+|  7 | NIP27 | Farel Nadhif   | Laki-Laki     | Bandung   | 1996-07-15 |         2 |          3 | Jl Merapi No. 27       |           0 |   60 |
+|  8 | NIP28 | Zahra Amir     | Perempuan     | Solo      | 1997-08-20 |         2 |          3 | Jl Sejuk No. 28        |           0 |   62 |
+|  9 | NIP29 | Ridwan Mulyadi | Laki-Laki     | Bogor     | 1998-09-25 |         2 |          2 | Jl. Meraih Jaya No. 29 |           0 |   59 |
+| 10 | NIP30 | Nurul Hasanah  | Perempuan     | Surabaya  | 1999-10-30 |         2 |          2 | Jl Kosongan No. 30     |           0 |   40 |
++----+-------+----------------+---------------+-----------+------------+-----------+------------+------------------------+-------------+------+
+5 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jumlah_pegawai FROM pegawai;
++----------------+
+| jumlah_pegawai |
++----------------+
+|             18 |
++----------------+
+1 row in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT nip, nama, umur
+    ->     -> FROM pegawai
+    -> SELECT COUNT(*) AS jumlah_pegawai FROM pegawai;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '> FROM pegawai
+SELECT COUNT(*) AS jumlah_pegawai FROM pegawai' at line 2
+MariaDB [dbpegawai]> SELECT nip, nama, umur
+    -> FROM pegawai
+    -> WHERE umur = (SELECT MAX(umur) FROM pegawai);
++-------+----------------+------+
+| nip   | nama           | umur |
++-------+----------------+------+
+| NIP21 | Rian Ramadhan  |   67 |
+| NIP35 | Ridho Muhammad |   67 |
++-------+----------------+------+
+2 rows in set (0.002 sec)
+
+MariaDB [dbpegawai]> SELECT nip, nama, berat_badan
+    -> FROM pegawai
+    -> WHERE berat_badan = (SELECT MIN(berat_badan) FROM pegawai);
++-------+-------------------+-------------+
+| nip   | nama              | berat_badan |
++-------+-------------------+-------------+
+| NIP21 | Rian Ramadhan     |           0 |
+| NIP22 | Siti Nurhaliza    |           0 |
+| NIP23 | Farhan Farid      |           0 |
+| NIP24 | Saskia Karamoy    |           0 |
+| NIP25 | Raka Muhammad     |           0 |
+| NIP26 | Ghea Indrawari    |           0 |
+| NIP27 | Farel Nadhif      |           0 |
+| NIP28 | Zahra Amir        |           0 |
+| NIP29 | Ridwan Mulyadi    |           0 |
+| NIP30 | Nurul Hasanah     |           0 |
+| NIP31 | Irfan Subakti     |           0 |
+| NIP32 | Putri Ayunda      |           0 |
+| NIP33 | Bambang Sutrisno  |           0 |
+| NIP34 | Rizka Amelia      |           0 |
+| NIP35 | Ridho Muhammad    |           0 |
+| NIP36 | Indah Permatasari |           0 |
+| NIP37 | Ahmad Fauzi       |           0 |
+| NIP38 | Siti Rahma        |           0 |
++-------+-------------------+-------------+
+18 rows in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT AVG(umur) AS rata_rata_umur_pegawai
+    -> FROM pegawai;
++------------------------+
+| rata_rata_umur_pegawai |
++------------------------+
+|                49.5556 |
++------------------------+
+1 row in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jumlah_pegawai
+    ->     -> FROM pegawai
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '-> FROM pegawai' at line 2
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jumlah_pegawai
+    -> FROM pegawai
+    -> WHERE jenis_kelamin = 'Laki-Laki'
+    -> AND umur > 40
+    -> AND id_jabatan = 1;
++----------------+
+| jumlah_pegawai |
++----------------+
+|              2 |
++----------------+
+1 row in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jumlah_pegawai
+    -> FROM pegawai
+    -> WHERE jenis_kelamin = 'Perempuan'
+    -> AND umur < 40
+    -> AND id_jabatan = 2;
++----------------+
+| jumlah_pegawai |
++----------------+
+|              1 |
++----------------+
+1 row in set (0.001 sec)
+
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jumlah_pegawai_perempuan
+    -> FROM pegawai
+    -> SELECT COUNT(*) AS jumlah_pegawai_perempuan
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'SELECT COUNT(*) AS jumlah_pegawai_perempuan' at line 3
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jumlah_pegawai_perempuan
+    -> FROM pegawai
+    -> WHERE jenis_kelamin = 'Perempuan';
++--------------------------+
+| jumlah_pegawai_perempuan |
++--------------------------+
+|                        9 |
++--------------------------+
+1 row in set (0.002 sec)
+
+MariaDB [dbpegawai]> SELECT SUM(CASE WHEN id_divisi = 1 THEN 1 ELSE 0 END) AS jumlah_pegawai_SDM
+    -> FROM pegawai
+    -> WHERE id_divisi = 1;
++--------------------+
+| jumlah_pegawai_SDM |
++--------------------+
+|                  5 |
++--------------------+
+1 row in set (0.001 sec)
+
+MariaDB [dbpegawai]>
